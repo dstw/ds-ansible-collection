@@ -1,0 +1,36 @@
+---
+server_hostname: "st_server"
+server_timezone: "Asia/Jakarta"
+user_apps: "git-user"
+api_servername1: "api.demo"
+api_servername2: "api2.demo"
+packages:
+  - php-cli-prompt
+  - php-common
+  - php-composer-ca-bundle
+  - php-composer-semver
+  - php-composer-spdx-licenses
+  - php-json-schema
+  - php-psr-log
+  - php-symfony-console
+  - php-symfony-debug
+  - php-symfony-filesystem
+  - php-symfony-finder
+  - php-symfony-polyfill-mbstring
+  - php-symfony-process
+  - libapache2-mod-php7.3
+  - php7.3
+  - php7.3-cli
+  - php7.3-common
+  - php7.3-curl
+  - php7.3-intl
+  - php7.3-json
+  - php7.3-mbstring
+  - php7.3-mysql
+  - php7.3-opcache
+  - php7.3-pgsql
+  - php7.3-readline
+  - php7.3-xml
+  - php7.3-xsl
+  - php7.3-zip
+  - composer

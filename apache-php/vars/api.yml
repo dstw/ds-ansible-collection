@@ -1,0 +1,7 @@
+---
+vhost_servername: "api.demo"
+vhost_serveralias: "api.demo"
+vhost_serveradmin: "user@webmaster.com"
+vhost_documentroot: "/home/git-user/api-repo/public_html"
+vhost_errorlog: "api-error.log"
+vhost_accesslog: "api-access.log"

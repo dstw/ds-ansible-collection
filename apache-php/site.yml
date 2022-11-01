@@ -1,0 +1,7 @@
+---
+
+- import_playbook: tasks/webserver.yml
+
+- import_playbook: tasks/api.yml
+
+- import_playbook: tasks/ux.yml

@@ -1,0 +1,7 @@
+---
+vhost_servername: "ux.demo"
+vhost_serveralias: "ux.demo"
+vhost_serveradmin: "user@webmaster.com"
+vhost_documentroot: "/home/git-user/ux-repo/public_html"
+vhost_errorlog: "ux-error.log"
+vhost_accesslog: "ux-access.log"

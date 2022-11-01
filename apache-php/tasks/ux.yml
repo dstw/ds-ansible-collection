@@ -1,0 +1,29 @@
+---
+- hosts: all
+  become: true
+  vars_files:
+    - vars/default.yml
+    - vars/ux.yml
+
+  tasks:
+    - name: Set vhost boss ux
+      template:
+        src: "templates/vhost/http.j2"
+        dest: "/etc/apache2/sites-available/ux.dst.conf"
+        owner: root
+        group: root
+        mode: '0644'
+      notify: Reload Apache
+
+    - name: Enable vhost
+      file:
+        src: "/etc/apache2/sites-available/ux.dst.conf"
+        dest: "/etc/apache2/sites-enabled/ux.dst.conf"
+        state: link
+      notify: Reload Apache
+
+  handlers:
+    - name: Reload Apache
+      service:
+        name: apache2
+        state: reloaded

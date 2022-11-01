@@ -1,0 +1,34 @@
+---
+- hosts: all
+  become: true
+  vars_files:
+    - vars/default.yml
+    - vars/api.yml
+
+  tasks:
+    - name: Set vhost boss api
+      template:
+        src: "templates/vhost/http.j2"
+        dest: "/etc/apache2/sites-available/api.dst.conf"
+        owner: root
+        group: root
+        mode: '0644'
+      notify: Reload Apache
+
+    - name: Enable vhost
+      file:
+        src: "/etc/apache2/sites-available/api.dst.conf"
+        dest: "/etc/apache2/sites-enabled/api.dst.conf"
+        state: link
+      notify: Reload Apache
+
+  handlers:
+    - name: Reload Apache
+      service:
+        name: apache2
+        state: reloaded
+
+    - name: Restart Memcached
+      service:
+        name: memcached
+        state: restarted

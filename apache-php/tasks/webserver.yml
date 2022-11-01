@@ -1,0 +1,89 @@
+---
+- hosts: all
+  become: true
+  vars_files:
+    - vars/default.yml
+
+  tasks:
+    - name: Set a hostname
+      hostname:
+        name: "{{ server_hostname }}"
+
+    - name: Set timezone
+      community.general.timezone:
+        name: "{{ server_timezone }}"
+
+    - name: Add Ondrej PHP Repository
+      apt_repository:
+        repo: ppa:ondrej/php
+
+    - name: Install packages
+      apt:
+        name: "{{ packages }}"
+        state: present
+
+    - name: Set host
+      template:
+        src: "templates/hosts.j2"
+        dest: "/etc/hosts"
+        owner: root
+        group: root
+        mode: '0644'
+
+    - name: Start Apache
+      service:
+        name: apache2
+        state: started
+        enabled: true
+
+    - name: Set apache process owner
+      template:
+        src: "templates/envvars.j2"
+        dest: "/etc/apache2/envvars"
+        owner: root
+        group: root
+        mode: '0644'
+      notify: Restart Apache
+
+    - name: Enable required Apache module
+      community.general.apache2_module:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - headers
+        - rewrite
+        - ssl
+      notify: Restart Apache
+
+    - name: Set mutex conf
+      template:
+        src: "files/mutex-file.conf"
+        dest: "/etc/apache2/conf-available/mutex-file.conf"
+        owner: root
+        group: root
+        mode: '0644'
+      notify: Restart Apache
+
+    - name: Enable mutex conf
+      file:
+        src: "/etc/apache2/conf-available/mutex-file.conf"
+        dest: "/etc/apache2/conf-enabled/mutex-file.conf"
+        state: link
+      notify: Restart Apache
+
+    - name: Remove default apache site
+      file:
+        path: "/etc/apache2/sites-enabled/000-default.conf"
+        state: absent
+      notify: Reload Apache
+
+  handlers:
+    - name: Reload Apache
+      service:
+        name: apache2
+        state: reloaded
+
+    - name: Restart Apache
+      service:
+        name: apache2
+        state: restarted
